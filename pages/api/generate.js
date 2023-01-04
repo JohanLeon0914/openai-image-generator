@@ -15,8 +15,8 @@ export default async function (req, res) {
     return;
   }
 
-  const animal = req.body.animal || '';
-  if (animal.trim().length === 0) {
+  const request = req.body.animal || '';
+  if (request.trim().length === 0) {
     res.status(400).json({
       error: {
         message: "Please enter a valid animal",
@@ -26,12 +26,14 @@ export default async function (req, res) {
   }
 
   try {
-    const completion = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: generatePrompt(animal),
-      temperature: 0.6,
+    const completion = await openai.createImage({
+      model: 'image-alpha-001',
+      prompt: request,
+      num_images: 1,
+      size: '256x256',
+      response_format: 'url',
     });
-    res.status(200).json({ result: completion.data.choices[0].text });
+    res.status(200).json({ result: completion.data.data[0].url });
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
