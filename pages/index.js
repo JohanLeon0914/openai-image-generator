@@ -1,9 +1,10 @@
 import Head from "next/head";
 import { useState } from "react";
 import styles from "./index.module.css";
+import Menu from '../components/Menu'
 
 export default function Home() {
-  const [animalInput, setAnimalInput] = useState("");
+  const [textInput, setTextInput] = useState("");
   const [result, setResult] = useState();
 
   async function onSubmit(event) {
@@ -14,7 +15,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ animal: animalInput }),
+        body: JSON.stringify({ text: textInput }),
       });
 
       const data = await response.json();
@@ -22,7 +23,7 @@ export default function Home() {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
       setResult(data.result);
-      setAnimalInput("");
+      setTextInput("");
     } catch(error) {
       // Consider implementing your own error handling logic here
       console.error(error);
@@ -35,20 +36,19 @@ export default function Home() {
       <Head>
         <title>OpenAI</title>
       </Head>
-
       <main className={styles.main}>
-        <h3>Digite una pregunta</h3>
+        <h3>Digite una palabra</h3>
         <form onSubmit={onSubmit}>
           <input
             type="text"
-            name="animal"
-            placeholder="Enter an question"
-            value={animalInput}
-            onChange={(e) => setAnimalInput(e.target.value)}
+            name="text"
+            placeholder="digite una palabra"
+            value={textInput}
+            onChange={(e) => setTextInput(e.target.value)}
           />
-          <input type="submit" value="Generate names" />
+          <input type="submit" value="Generate image" />
         </form>
-        <div className={styles.result}><img src={result} /> {console.log(result)} </div>
+        <div className={styles.result}><img src={result} />  </div>
       </main>
     </div>
   );
